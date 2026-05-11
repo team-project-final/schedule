@@ -346,6 +346,18 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outli
   .kanban-card[data-variant="consumer"]:hover {
     box-shadow: inset 4px 0 0 0 var(--oxblood), 4px 4px 0 0 var(--oxblood);
   }
+
+  /* Kanban action button hover (status transition fallback) */
+  .kanban-action:not(:disabled):hover {
+    background: var(--oxblood) !important;
+    color: var(--paper) !important;
+    border-color: var(--oxblood) !important;
+  }
+  .kanban-action[data-action="backward"]:not(:disabled):hover {
+    background: var(--paper-deep) !important;
+    color: var(--ink) !important;
+    border-color: var(--ink) !important;
+  }
 }
 
 /* Stagger delay tokens (use inline style for high N) */
