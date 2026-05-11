@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SYN — Schedule Drawings · Blueprint mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;500;700;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  /* — Cyanotype palette — */
+  --ink:        #0E2F50;     /* primary blueprint ink */
+  --ink-soft:   #2D4868;
+  --ink-faint:  rgba(14, 47, 80, 0.18);
+  --ink-grid:   rgba(14, 47, 80, 0.08);
+  --paper:      #F4EEDC;     /* cream paper */
+  --paper-2:    #ECE3CB;
+  --paper-deep: #DDD0AF;
+  --oxblood:    #7A2426;     /* milestone / risk */
+  --oxblood-soft: rgba(122, 36, 38, 0.12);
+  --graphite:   #1A1A1A;
+  --grey:       #6B7C8A;
+
+  /* — Spacing 4pt scale — */
+  --s-1: 4px;  --s-2: 8px;  --s-3: 12px;  --s-4: 16px;
+  --s-5: 24px; --s-6: 32px; --s-7: 48px;  --s-8: 64px;
+  --s-9: 96px; --s-10: 128px;
+
+  /* — Typography — */
+  --font-display: 'Big Shoulders Display', sans-serif;
+  --font-script:  'Fraunces', serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
+
+  /* — Grid (1ch = 1 영업일 단위 in Gantt) — */
+  --cell: 28px;
+  --grid-mm: 16px;          /* 4mm 종이 격자 (스크린 16px) */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+
+  /* Cyanotype 격자 종이 + grain */
+  background-image:
+    linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 30% 20%, rgba(14,47,80,0.04), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(122,36,38,0.03), transparent 50%);
+  background-size: var(--grid-mm) var(--grid-mm), var(--grid-mm) var(--grid-mm), 100% 100%, 100% 100%;
+}
+
+/* SVG noise overlay for paper texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.18  0 0 0 0 0.31  0 0 0 0.5 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+}
+
+/* — Drawing sheet (frame) — */
+.sheet {
+  position: relative;
+  margin: var(--s-7) auto;
+  max-width: 1400px;
+  background: var(--paper);
+  background-image:
+    linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px);
+  background-size: var(--grid-mm) var(--grid-mm), var(--grid-mm) var(--grid-mm);
+  border: 1px solid var(--ink);
+  padding: var(--s-7);
+  box-shadow:
+    0 0 0 1px var(--ink) inset,
+    0 0 0 var(--s-2) var(--paper) inset,
+    0 0 0 calc(var(--s-2) + 1px) var(--ink-faint) inset,
+    0 24px 48px rgba(14,47,80,0.10);
+}
+.sheet::before, .sheet::after {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  border: 1px solid var(--ink); background: var(--paper);
+}
+.sheet::before { top: -8px; left: -8px; transform: rotate(45deg); }
+.sheet::after  { bottom: -8px; right: -8px; transform: rotate(45deg); }
+
+/* — Sheet titleblock (engineer drawing 우상단 메타 박스) — */
+.titleblock {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: var(--s-6);
+  padding-bottom: var(--s-6);
+  border-bottom: 1px solid var(--ink);
+  margin-bottom: var(--s-7);
+}
+.titleblock h1 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(56px, 9vw, 132px);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+.titleblock h1 em {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.55em;
+  color: var(--oxblood);
+  letter-spacing: -0.01em;
+  display: block;
+  margin-top: var(--s-3);
+}
+.titleblock .lede {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  margin-top: var(--s-4);
+  max-width: 56ch;
+}
+.meta-table {
+  border: 1px solid var(--ink);
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  align-self: start;
+}
+.meta-table td {
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+}
+.meta-table td.k { background: var(--paper-2); width: 110px; color: var(--ink-soft); }
+.meta-table td.v { font-weight: 600; }
+.meta-table td.stamp {
+  font-family: var(--font-script);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--oxblood);
+  font-size: 14px;
+}
+
+/* — Sheet section — */
+.section-label {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  margin: var(--s-7) 0 var(--s-4);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px dashed var(--ink-faint);
+}
+.section-label .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--oxblood);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.section-label h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.section-label .note {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* — Color/Typography specimens — */
+.system-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--s-3);
+}
+.spec-card {
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: var(--s-4);
+  position: relative;
+}
+.spec-card .tag {
+  position: absolute;
+  top: -1px; right: -1px;
+  background: var(--ink); color: var(--paper);
+  padding: 2px var(--s-2);
+  font-size: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.spec-card .label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--ink-soft);
+  margin-top: var(--s-3);
+}
+.spec-card .value {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink);
+  margin-top: var(--s-1);
+}
+
+/* color swatches */
+.swatch {
+  height: 96px;
+  border: 1px solid var(--ink);
+}
+.swatch.ink     { background: var(--ink); }
+.swatch.paper   { background: var(--paper); background-image:
+                  linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+                  linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px);
+                  background-size: var(--grid-mm) var(--grid-mm); }
+.swatch.oxblood { background: var(--oxblood); }
+.swatch.grey    { background: var(--grey); }
+.swatch.graphite{ background: var(--graphite); }
+
+/* type specimens */
+.type-display {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 88px; line-height: 0.9; letter-spacing: -0.02em;
+  text-transform: uppercase; color: var(--ink);
+}
+.type-script {
+  font-family: var(--font-script); font-style: italic; font-size: 38px;
+  color: var(--oxblood); line-height: 1;
+}
+.type-mono   { font-family: var(--font-mono); font-size: 14px; color: var(--ink); }
+.type-mono-mini { font-family: var(--font-mono); font-size: 10px;
+                  letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* drawing symbols */
+.symbols {
+  display: flex; gap: var(--s-5);
+  font-size: 32px; color: var(--ink);
+  margin-top: var(--s-3);
+  align-items: center;
+}
+.symbols span { display: inline-flex; align-items: center; flex-direction: column; gap: 4px; }
+.symbols small { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em;
+                 text-transform: uppercase; color: var(--ink-soft); }
+
+/* — Weekly sheet — */
+.weekly {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: var(--s-6);
+  margin-top: var(--s-5);
+}
+.weekly .week-no {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 220px;
+  line-height: 0.85;
+  color: var(--ink);
+  letter-spacing: -0.04em;
+}
+.weekly .week-no small {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--ink-soft);
+  margin-top: var(--s-3);
+  font-weight: 400;
+}
+.week-name {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--oxblood);
+  margin-bottom: var(--s-5);
+  line-height: 1.1;
+}
+.week-meta {
+  display: flex; gap: var(--s-5);
+  font-family: var(--font-mono); font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: var(--s-5);
+}
+.week-meta b { color: var(--ink); font-weight: 600; }
+
+/* day columns */
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--ink);
+  position: relative;
+}
+.day-col {
+  border-right: 1px solid var(--ink-faint);
+  min-height: 380px;
+  padding: var(--s-3);
+  position: relative;
+}
+.day-col:last-child { border-right: 0; }
+.day-col .day-head {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: var(--s-2);
+  margin-bottom: var(--s-3);
+  display: flex; justify-content: space-between;
+}
+.day-col .day-head b { color: var(--ink); font-weight: 600; }
+
+.task {
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: var(--s-2) var(--s-3);
+  margin-bottom: var(--s-2);
+  position: relative;
+  font-size: 11.5px;
+  line-height: 1.35;
+}
+.task .task-id {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 2px;
+  display: flex; justify-content: space-between;
+}
+.task .task-id .pri { color: var(--oxblood); font-weight: 600; }
+.task .name { color: var(--ink); }
+.task.producer { box-shadow: inset 4px 0 0 0 var(--ink); }
+.task.consumer { box-shadow: inset 4px 0 0 0 var(--oxblood); background: linear-gradient(90deg, rgba(122,36,38,0.04), transparent 60%); }
+.task.gate {
+  background: var(--ink); color: var(--paper); border-color: var(--ink);
+}
+.task.gate .task-id { color: rgba(244,238,220,0.6); }
+.task.gate .task-id .pri { color: var(--paper); }
+
+/* hatched (휴일/제외일 cell) */
+.day-col.holiday {
+  background:
+    repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 8px);
+  text-align: center;
+  padding-top: var(--s-7);
+}
+.day-col.holiday .holiday-stamp {
+  font-family: var(--font-script);
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 24px;
+  transform: rotate(-8deg);
+  display: inline-block;
+  border: 2px solid var(--oxblood);
+  padding: var(--s-2) var(--s-4);
+  background: var(--paper);
+}
+.day-col.holiday .holiday-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  margin-top: var(--s-3);
+}
+
+/* — Gantt sheet — */
+.gantt {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0;
+  border: 1px solid var(--ink);
+  margin-top: var(--s-5);
+  position: relative;
+  overflow-x: auto;
+}
+.gantt .track-labels {
+  background: var(--paper-2);
+  border-right: 1px solid var(--ink);
+}
+.gantt .track-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--ink-faint);
+  display: flex; align-items: center; justify-content: space-between;
+  min-height: 56px;
+  background: var(--paper-2);
+}
+.gantt .track-label small { color: var(--ink-soft); font-weight: 400; letter-spacing: 0.2em; }
+.gantt .track-label.header {
+  background: var(--ink); color: var(--paper);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.04em;
+  min-height: 48px;
+}
+.gantt .timeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(23, var(--cell));
+  background:
+    linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px);
+  background-size: var(--cell) var(--cell);
+  min-width: calc(var(--cell) * 23);
+}
+.timeline .header-row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(23, var(--cell));
+  background: var(--ink);
+  height: 48px;
+}
+.timeline .day-tick {
+  border-right: 1px solid rgba(244,238,220,0.15);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--paper);
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding-top: var(--s-2);
+  position: relative;
+}
+.timeline .day-tick small {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(244,238,220,0.5);
+  margin-top: 2px;
+}
+.timeline .day-tick.week-start {
+  border-left: 1px solid var(--paper);
+}
+.timeline .day-tick.week-start::before {
+  content: attr(data-week);
+  position: absolute;
+  top: -22px; left: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  background: var(--paper);
+  padding: 2px 6px;
+  border: 1px solid var(--ink);
+  z-index: 2;
+}
+.timeline .day-tick.holiday-tick {
+  background: repeating-linear-gradient(135deg, rgba(122,36,38,0.5) 0, rgba(122,36,38,0.5) 1px, transparent 1px, transparent 6px);
+  color: rgba(244,238,220,0.4);
+}
+
+.timeline .row {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(23, var(--cell));
+  height: 56px;
+  border-bottom: 1px solid var(--ink-faint);
+  position: relative;
+}
+.row .holiday-cell {
+  background: repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 6px);
+}
+.bar {
+  align-self: center;
+  height: 22px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 0 var(--s-2);
+  display: flex; align-items: center;
+  border: 1px solid var(--ink);
+  position: relative;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar.consumer { background: var(--oxblood); border-color: var(--oxblood); }
+.bar.outline { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.bar.outline.consumer { color: var(--oxblood); border-color: var(--oxblood); }
+.bar.dashed { border-style: dashed; }
+
+/* milestone diamond */
+.milestone {
+  align-self: center; justify-self: center;
+  width: 18px; height: 18px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  transform: rotate(45deg);
+}
+.milestone.gate { background: var(--ink); }
+.milestone.presentation {
+  background: var(--oxblood); border-color: var(--oxblood);
+  width: 24px; height: 24px;
+  position: relative;
+}
+.milestone.presentation::after {
+  content: '★'; position: absolute;
+  inset: 0; display: flex; align-items: center; justify-content: center;
+  color: var(--paper);
+  font-size: 14px;
+  transform: rotate(-45deg);
+}
+
+/* legend */
+.legend {
+  display: flex; gap: var(--s-5);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: var(--s-4);
+  padding-top: var(--s-3);
+  border-top: 1px dashed var(--ink-faint);
+  flex-wrap: wrap;
+}
+.legend .item { display: flex; align-items: center; gap: var(--s-2); }
+.legend .swatch-mini {
+  width: 24px; height: 12px;
+  border: 1px solid var(--ink);
+}
+.legend .sm-producer { background: var(--ink); }
+.legend .sm-consumer { background: var(--oxblood); border-color: var(--oxblood); }
+.legend .sm-outline  { background: var(--paper); }
+.legend .sm-holiday  { background: repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 4px); }
+
+/* — Footer titleblock revision — */
+.revblock {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  border: 1px solid var(--ink);
+  margin-top: var(--s-7);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.revblock .cell {
+  padding: var(--s-3) var(--s-4);
+  border-right: 1px solid var(--ink-faint);
+  color: var(--ink);
+}
+.revblock .cell:last-child { border-right: 0; }
+.revblock .cell .k { color: var(--ink-soft); display: block; margin-bottom: var(--s-1); font-size: 9px; }
+.revblock .cell .v { font-weight: 600; }
+.revblock .cell.signature {
+  font-family: var(--font-script);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--oxblood);
+  font-size: 16px;
+}
+
+/* — Top nav (drawing index) — */
+.topnav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--ink);
+  color: var(--paper);
+  padding: var(--s-3) var(--s-7);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  display: flex; gap: var(--s-6); align-items: center;
+  border-bottom: 1px solid var(--paper);
+}
+.topnav .brand { font-family: var(--font-display); font-weight: 900; font-size: 18px; letter-spacing: 0.06em; }
+.topnav a {
+  color: var(--paper); text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  padding: 2px 0;
+}
+.topnav a:hover { border-bottom-color: var(--paper); color: #FFC9A8; }
+.topnav .right { margin-left: auto; color: rgba(244,238,220,0.6); font-size: 10px; }
+
+/* annotations (callout lines like in blueprints) */
+.annotation {
+  position: relative;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-top: var(--s-3);
+}
+.annotation::before {
+  content: 'NOTE'; position: absolute;
+  top: -1px; left: -1px;
+  background: var(--ink); color: var(--paper);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 2px var(--s-2);
+}
+.annotation b { color: var(--oxblood); }
+
+/* responsive */
+@media (max-width: 900px) {
+  .titleblock { grid-template-columns: 1fr; }
+  .titleblock h1 { font-size: 14vw; }
+  .weekly { grid-template-columns: 1fr; }
+  .weekly .week-no { font-size: 30vw; }
+  .day-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="brand">SYN — DRAWINGS</span>
+  <a href="#system">§00 SYSTEM</a>
+  <a href="#weekly">§01 WEEKLY · W3</a>
+  <a href="#gantt">§02 PLAN · 5W</a>
+  <span class="right">CYANOTYPE EDITION · v3.0 · 2026.05.11</span>
+</nav>
+
+<!-- ========================================================================== -->
+<!-- SHEET 00 — DESIGN SYSTEM TITLEBLOCK                                       -->
+<!-- ========================================================================== -->
+<main class="sheet" id="system">
+  <header class="titleblock">
+    <div>
+      <h1>
+        Schedule<br>
+        Drawings
+        <em>— five-week project sheet · cyanotype edition</em>
+      </h1>
+      <p class="lede">
+        Synapse 5주 학기 프로젝트 일정의 청사진 디자인 시스템.
+        도메인이 엔지니어링이라면 도구도 도면처럼.
+        모든 화면은 한 장의 시트(sheet)로, 모든 task는 부품(part)으로 표시한다.
+      </p>
+    </div>
+    <table class="meta-table">
+      <tr><td class="k">Drawing No.</td><td class="v">SYN-DS-00</td></tr>
+      <tr><td class="k">Title</td><td class="v">Schedule Design System</td></tr>
+      <tr><td class="k">Revision</td><td class="v">3.0 — 5-week</td></tr>
+      <tr><td class="k">Date</td><td class="v">2026-05-11</td></tr>
+      <tr><td class="k">Scale</td><td class="v">1ch ≡ 1 영업일</td></tr>
+      <tr><td class="k">Approved</td><td class="v stamp">velka ✎</td></tr>
+    </table>
+  </header>
+
+  <div class="section-label">
+    <span class="num">§00.1</span>
+    <h2>Pigment / Ink Index</h2>
+    <span class="note">cyanotype + cream + oxblood</span>
+  </div>
+  <div class="system-grid">
+    <div class="spec-card" style="grid-column: span 3;">
+      <span class="tag">PRIMARY</span>
+      <div class="swatch ink"></div>
+      <div class="label">Cyanotype Ink</div>
+      <div class="value">#0E2F50 · 99% body</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 3;">
+      <span class="tag">PAPER</span>
+      <div class="swatch paper"></div>
+      <div class="label">Cream Paper</div>
+      <div class="value">#F4EEDC · 4mm grid</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 3;">
+      <span class="tag">ACCENT</span>
+      <div class="swatch oxblood"></div>
+      <div class="label">Oxblood Stamp</div>
+      <div class="value">#7A2426 · risk · gate · 휴일</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 3;">
+      <span class="tag">NEUTRAL</span>
+      <div class="swatch grey"></div>
+      <div class="label">Cool Grey</div>
+      <div class="value">#6B7C8A · meta · 라벨</div>
+    </div>
+  </div>
+
+  <div class="section-label">
+    <span class="num">§00.2</span>
+    <h2>Type Specimens</h2>
+    <span class="note">Big Shoulders Display · Fraunces · IBM Plex Mono</span>
+  </div>
+  <div class="system-grid">
+    <div class="spec-card" style="grid-column: span 8;">
+      <span class="tag">DISPLAY</span>
+      <div class="type-display">SPRINT&nbsp;W3</div>
+      <div class="label">Big Shoulders Display 900 · 88pt — 시트 제목, 주차 번호</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 4;">
+      <span class="tag">SCRIPT</span>
+      <div class="type-script">— event producer</div>
+      <div class="label">Fraunces italic 9..144pt — 부제, 도장(stamp)</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 6;">
+      <span class="tag">MONO</span>
+      <div class="type-mono">2026-05-26 → 2026-05-29 · 4 영업일 · 5/25 부처님오신날 제외</div>
+      <div class="label">IBM Plex Mono 400 · 14pt — 본문, task 라벨, 날짜</div>
+    </div>
+    <div class="spec-card" style="grid-column: span 6;">
+      <span class="tag">MICRO</span>
+      <div class="type-mono-mini">DRAWING NO. SYN-W3 · REV 3.0 · 2026-05-11 · APPROVED</div>
+      <div class="label">IBM Plex Mono 500 · 10pt · 0.2em — 메타 라벨, 도면 표기</div>
+    </div>
+  </div>
+
+  <div class="section-label">
+    <span class="num">§00.3</span>
+    <h2>Drawing Symbols</h2>
+    <span class="note">milestone · gate · presentation · holiday</span>
+  </div>
+  <div class="symbols">
+    <span><div class="milestone"></div><small>milestone (gate)</small></span>
+    <span><div class="milestone gate"></div><small>w-gate completed</small></span>
+    <span><div class="milestone presentation"></div><small>presentation 6/15</small></span>
+    <span style="border:1px solid var(--ink); padding: 6px 10px; background: repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 6px);"><small>휴일 / 제외일</small></span>
+    <span style="border:1px solid var(--ink); padding: 6px 10px; box-shadow: inset 4px 0 0 0 var(--ink);"><small style="margin-top:4px;">producer task (W3)</small></span>
+    <span style="border:1px solid var(--oxblood); padding: 6px 10px; box-shadow: inset 4px 0 0 0 var(--oxblood); background: linear-gradient(90deg, rgba(122,36,38,0.06), transparent 60%);"><small style="margin-top:4px;">consumer task (W4)</small></span>
+  </div>
+
+  <div class="annotation">
+    <b>NOTE.</b> 모든 task 카드는 좌측 4px 색대(stripe)로 분류한다 — <b>cyanotype = producer</b> (W3 발행자),
+    <b>oxblood = consumer</b> (W4 소비자). gate(주차 종료 검증)는 솔리드 잉크 카드. 휴일은 격자 위 hatching으로 즉각 식별 가능.
+  </div>
+</main>
+
+<!-- ========================================================================== -->
+<!-- SHEET 01 — WEEKLY · W3 (이벤트 발행자)                                     -->
+<!-- ========================================================================== -->
+<main class="sheet" id="weekly">
+  <header class="titleblock">
+    <div>
+      <h1>
+        Sheet&nbsp;01<br>
+        Weekly · W3
+        <em>— 이벤트 발행자 + 검색 RRF + AI 자동 생성</em>
+      </h1>
+      <p class="lede">
+        한 주는 한 시트. 좌측의 거대한 주차 번호가 인덱스이고, 우측의 5칸 영업일 그리드가 본문이다.
+        5/25(부처님오신날)은 hatching 도장으로 즉시 식별. W3 종료 시 모든 producer 토픽이 Schema Registry에 등록되어야 함 — 이것이 W3 → W4 게이트.
+      </p>
+    </div>
+    <table class="meta-table">
+      <tr><td class="k">Drawing No.</td><td class="v">SYN-W3</td></tr>
+      <tr><td class="k">Period</td><td class="v">05/26 → 05/29</td></tr>
+      <tr><td class="k">Workdays</td><td class="v">4 (5/25 holiday)</td></tr>
+      <tr><td class="k">Tracks</td><td class="v">7 + frontend</td></tr>
+      <tr><td class="k">Tasks</td><td class="v">8 (producer)</td></tr>
+      <tr><td class="k">Drafted by</td><td class="v stamp">velka ✎</td></tr>
+    </table>
+  </header>
+
+  <div class="weekly">
+    <div>
+      <div class="week-no">
+        W3
+        <small>WEEK · 03 / 05</small>
+      </div>
+    </div>
+    <div>
+      <div class="week-name">— event publishers + RRF + AI auto-generation</div>
+      <div class="week-meta">
+        <span><b>2026-05-26</b> → <b>2026-05-29</b></span>
+        <span>HOLIDAY · <b style="color:var(--oxblood);">05/25 부처님오신날</b></span>
+        <span>NEXT GATE · <b>W4 consumers</b> (06/01)</span>
+      </div>
+
+      <div class="day-grid">
+        <div class="day-col holiday">
+          <span class="holiday-stamp">05·25</span>
+          <div class="holiday-meta">부처님오신날<br>휴일 · 격자 hatching</div>
+        </div>
+        <div class="day-col">
+          <div class="day-head"><b>화 26</b><span>D-1</span></div>
+          <div class="task producer">
+            <div class="task-id"><span>engagement-6</span><span class="pri">P0</span></div>
+            <div class="name">레벨/배지/스트릭/리더보드 시스템</div>
+          </div>
+          <div class="task producer">
+            <div class="task-id"><span>knowledge-1-6</span><span class="pri">P0</span></div>
+            <div class="name">노트 수정 이력 + 버전 복원</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-head"><b>수 27</b><span>D-2</span></div>
+          <div class="task producer">
+            <div class="task-id"><span>engagement-7</span><span class="pri">P0</span></div>
+            <div class="name">gamification.* Kafka 발행</div>
+          </div>
+          <div class="task producer">
+            <div class="task-id"><span>learning-card-7</span><span class="pri">P0</span></div>
+            <div class="name">card.review.due Kafka 발행</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-head"><b>목 28</b><span>D-3</span></div>
+          <div class="task producer">
+            <div class="task-id"><span>knowledge-2-7</span><span class="pri">P0</span></div>
+            <div class="name">검색 RRF (BM25 + 시맨틱)</div>
+          </div>
+          <div class="task producer">
+            <div class="task-id"><span>frontend-7</span><span class="pri">P0</span></div>
+            <div class="name">게이미피케이션 UI</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-head"><b>금 29</b><span>D-4 · GATE</span></div>
+          <div class="task producer">
+            <div class="task-id"><span>knowledge-1-7</span><span class="pri">P0</span></div>
+            <div class="name">태그 필터링 + 자동완성</div>
+          </div>
+          <div class="task producer">
+            <div class="task-id"><span>learning-card-8</span><span class="pri">P0</span></div>
+            <div class="name">복습 통계 대시보드</div>
+          </div>
+          <div class="task gate">
+            <div class="task-id"><span>W3 → W4 GATE</span><span class="pri">SEAL</span></div>
+            <div class="name">all producers · Schema Registry · BACKWARD ✓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="annotation">
+        <b>GATE NOTE.</b> 금요일 마감 시점에 모든 producer 토픽 (<code>gamification.level_up</code>, <code>badge_earned</code>,
+        <code>card.review.due</code>, <code>note.created</code>)이 Schema Registry에 BACKWARD 호환으로 등록되어야 함.
+        미충족 시 W4 consumer 시작 차단. — <b>이는 시트 봉인 도장(SEAL)으로 표시.</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="revblock">
+    <div class="cell"><span class="k">Drawn</span><span class="v">2026-05-11</span></div>
+    <div class="cell"><span class="k">Checked</span><span class="v">team-lead</span></div>
+    <div class="cell"><span class="k">Approved</span><span class="signature">— velka ✎</span></div>
+    <div class="cell"><span class="k">Sheet</span><span class="v">01 of 06</span></div>
+  </div>
+</main>
+
+<!-- ========================================================================== -->
+<!-- SHEET 02 — GANTT · 5W + PRESENTATION                                       -->
+<!-- ========================================================================== -->
+<main class="sheet" id="gantt">
+  <header class="titleblock">
+    <div>
+      <h1>
+        Sheet&nbsp;02<br>
+        Plan · 5W + 6/15
+        <em>— full project schematic · 22 workdays + presentation</em>
+      </h1>
+      <p class="lede">
+        프로젝트 전체 도면. 가로축은 영업일(1ch = 1일, 휴일은 hatching), 세로축은 트랙(8행).
+        ◇ 마일스톤, ★ 발표일. cyanotype 막대는 producer / oxblood 막대는 consumer · 점선은 잔무 이월.
+      </p>
+    </div>
+    <table class="meta-table">
+      <tr><td class="k">Drawing No.</td><td class="v">SYN-PLAN-5W</td></tr>
+      <tr><td class="k">Range</td><td class="v">05/12 → 06/15</td></tr>
+      <tr><td class="k">Workdays</td><td class="v">22 + 1 demo</td></tr>
+      <tr><td class="k">Holidays</td><td class="v">05/25 · 06/03</td></tr>
+      <tr><td class="k">Tracks</td><td class="v">8</td></tr>
+      <tr><td class="k">Drafted by</td><td class="v stamp">velka ✎</td></tr>
+    </table>
+  </header>
+
+  <div class="gantt">
+    <div class="track-labels">
+      <div class="track-label header">TRACK</div>
+      <div class="track-label">team-lead<small>infra</small></div>
+      <div class="track-label">platform<small>auth · billing</small></div>
+      <div class="track-label">engagement<small>community · xp</small></div>
+      <div class="track-label">knowledge-1<small>note · graph</small></div>
+      <div class="track-label">knowledge-2<small>chunking · search</small></div>
+      <div class="track-label">learning-card<small>srs (java)</small></div>
+      <div class="track-label">learning-ai<small>fastapi</small></div>
+      <div class="track-label">frontend<small>flutter</small></div>
+    </div>
+
+    <div class="timeline">
+      <!-- header row : 23 cells (22 workdays + 1 presentation) -->
+      <div class="header-row">
+        <!-- W1: 5/12 ~ 5/15 (4) -->
+        <div class="day-tick week-start" data-week="W1">12<small>화</small></div>
+        <div class="day-tick">13<small>수</small></div>
+        <div class="day-tick">14<small>목</small></div>
+        <div class="day-tick">15<small>금</small></div>
+        <!-- W2: 5/18 ~ 5/22 (5) -->
+        <div class="day-tick week-start" data-week="W2">18<small>월</small></div>
+        <div class="day-tick">19<small>화</small></div>
+        <div class="day-tick">20<small>수</small></div>
+        <div class="day-tick">21<small>목</small></div>
+        <div class="day-tick">22<small>금</small></div>
+        <!-- W3: 5/26 ~ 5/29 (4) -->
+        <div class="day-tick week-start" data-week="W3">26<small>화</small></div>
+        <div class="day-tick">27<small>수</small></div>
+        <div class="day-tick">28<small>목</small></div>
+        <div class="day-tick">29<small>금</small></div>
+        <!-- W4: 6/1 ~ 6/5 (5 - 1 holiday) = 4 + holiday cell -->
+        <div class="day-tick week-start" data-week="W4">01<small>월</small></div>
+        <div class="day-tick">02<small>화</small></div>
+        <div class="day-tick holiday-tick">03<small>지선</small></div>
+        <div class="day-tick">04<small>목</small></div>
+        <div class="day-tick">05<small>금</small></div>
+        <!-- W5: 6/8 ~ 6/12 (5) -->
+        <div class="day-tick week-start" data-week="W5">08<small>월</small></div>
+        <div class="day-tick">09<small>화</small></div>
+        <div class="day-tick">10<small>수</small></div>
+        <div class="day-tick">11<small>목</small></div>
+        <div class="day-tick">12<small>금</small></div>
+        <!-- Presentation : 6/15 -->
+        <div class="day-tick week-start" data-week="6/15">15<small>발표</small></div>
+      </div>
+
+      <!-- team-lead row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">infra · k8s/rds/msk · argocd</div>
+        <div class="bar" style="grid-column: 5 / span 3;">kafka topics · schema reg.</div>
+        <div class="bar outline" style="grid-column: 8 / span 2;">gateway routing</div>
+        <div class="bar" style="grid-column: 10 / span 4;">w3 monitoring</div>
+        <div></div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">w4 integration · code review · argocd dev/staging</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">e2e + sla + staging final</div>
+        <div class="milestone presentation" style="grid-column: 23 / span 1;"></div>
+      </div>
+
+      <!-- platform row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">platform-svc · auth (oauth+jwt+mfa)</div>
+        <div class="bar" style="grid-column: 5 / span 4;">billing · stripe</div>
+        <div class="bar outline" style="grid-column: 9 / span 1;">fcm reg.</div>
+        <div class="bar outline dashed" style="grid-column: 10 / span 4;">w2 잔무 fcm</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">notification · audit · admin (consumer)</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">e2e auth + payment</div>
+      </div>
+
+      <!-- engagement row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">community · group crud · members</div>
+        <div class="bar" style="grid-column: 5 / span 5;">gamification xp + share token</div>
+        <div class="bar" style="grid-column: 10 / span 4;">level/badge/streak/leaderboard · gamification.* publish</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">신고 · admin moderation</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">e2e gamification + community</div>
+      </div>
+
+      <!-- knowledge-1 row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">note crud + wikilink</div>
+        <div class="bar" style="grid-column: 5 / span 5;">graph backlink + es sync</div>
+        <div class="bar" style="grid-column: 10 / span 4;">version · tag · pagerank</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer outline" style="grid-column: 14 / span 5;">통합 검증 · w3 잔무</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">e2e note/graph + es 안정화</div>
+      </div>
+
+      <!-- knowledge-2 row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">modulith · archunit · avro</div>
+        <div class="bar" style="grid-column: 5 / span 5;">chunking · bm25</div>
+        <div class="bar" style="grid-column: 10 / span 4;">rrf hybrid + 정확도</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">검색 튜닝 + e2e</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">검색 안정화 + 리포트</div>
+      </div>
+
+      <!-- learning-card row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">deck/card crud + sm-2</div>
+        <div class="bar" style="grid-column: 5 / span 5;">srs session + card.reviewed publish</div>
+        <div class="bar" style="grid-column: 10 / span 4;">card.review.due publish + 통계 대시보드</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">복습 e2e</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">복습 안정화 + kafka</div>
+      </div>
+
+      <!-- learning-ai row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">fastapi · claude · embedding</div>
+        <div class="bar" style="grid-column: 5 / span 5;">시맨틱 검색 + ai 카드 골격</div>
+        <div class="bar" style="grid-column: 10 / span 4;">자동 생성 안정화 + semantic cache</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">rag (시간 허용) + ai e2e + 정확도</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">시맨틱 검색 안정화</div>
+      </div>
+
+      <!-- frontend row -->
+      <div class="row">
+        <div class="bar" style="grid-column: 1 / span 4;">flutter shell · auth · dashboard</div>
+        <div class="bar" style="grid-column: 5 / span 5;">노트 에디터 · srs 화면 · community</div>
+        <div class="bar" style="grid-column: 10 / span 4;">gamification ui + 검색 ui</div>
+        <div class="row holiday-cell" style="grid-column: 16 / span 1;"></div>
+        <div class="bar consumer" style="grid-column: 14 / span 5;">알림 센터 · admin · 공유 덱</div>
+        <div class="bar outline" style="grid-column: 19 / span 5;">반응형 · 에러/로딩 · design tokens · demo data</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span class="item"><span class="swatch-mini sm-producer"></span> CYANOTYPE · producer (W1~W3)</span>
+    <span class="item"><span class="swatch-mini sm-consumer"></span> OXBLOOD · consumer (W4)</span>
+    <span class="item"><span class="swatch-mini sm-outline"></span> OUTLINE · 안정화 / E2E (W5)</span>
+    <span class="item"><span class="swatch-mini sm-holiday"></span> HATCHING · holiday (5/25 · 6/3)</span>
+    <span class="item">◇ MILESTONE · ★ PRESENTATION 6/15 (코드 동결)</span>
+  </div>
+
+  <div class="annotation" style="margin-top: var(--s-5);">
+    <b>RUNNING NOTE.</b> 본 도면은 <b>W3 종료 게이트</b> (Schema Registry · BACKWARD 호환 producer 토픽 100% 등록)와
+    <b>W4 종료 게이트</b> (consumer 통합 · ArgoCD dev/staging 검증)를 기준으로 좌→우 흐른다.
+    잔무 이월(점선)은 sync-from-md.js의 영업일 cursor 동작과 일치 — 의도된 동작이며 W5 안정화 단계에서 흡수된다.
+  </div>
+
+  <div class="revblock">
+    <div class="cell"><span class="k">Revision</span><span class="v">3.0 — 5-week</span></div>
+    <div class="cell"><span class="k">Replaces</span><span class="v">2.0 — 4-week (2026-05-09)</span></div>
+    <div class="cell"><span class="k">Approved</span><span class="signature">— velka ✎</span></div>
+    <div class="cell"><span class="k">Sheet</span><span class="v">02 of 06</span></div>
+  </div>
+</main>
+
+<footer style="text-align:center; padding: var(--s-7) 0; font-family: var(--font-mono); font-size: 10px; color: var(--ink-soft); letter-spacing: 0.2em; text-transform: uppercase;">
+  — END OF DRAWING SET ·  SYN-DRAWINGS · CYANOTYPE EDITION · 2026-05-11 —
+</footer>
+
+</body>
+</html>
