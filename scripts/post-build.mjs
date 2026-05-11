@@ -25,7 +25,8 @@ const ROUTES = [
   'weekly/W3',
   'weekly/W4',
   'weekly/W5',
-  'weekly', // redirects to W1 client-side
+  'weekly',          // redirects to W1 client-side
+  'login/callback',  // GitHub OAuth redirect target (when CLIENT_ID 설정 시)
 ]
 
 let copied = 0
