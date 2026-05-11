@@ -1,10 +1,114 @@
 [
-  {"id":"team-lead","handle":"@team-lead","name":null,"role":"팀장","track":"—","service":"Gateway / 인프라","modules":["Schema Registry","ArgoCD","CI/CD"],"avatar":null},
-  {"id":"platform","handle":"@platform-owner","name":null,"role":"트랙 A","track":"A","service":"synapse-platform-svc","modules":["auth","audit","billing","notification"],"avatar":null},
-  {"id":"engagement","handle":"@engagement-owner","name":null,"role":"트랙 B","track":"B","service":"synapse-engagement-svc","modules":["community","gamification"],"avatar":null},
-  {"id":"knowledge-1","handle":"@knowledge-owner-1","name":null,"role":"트랙 C-1","track":"C","service":"synapse-knowledge-svc","modules":["note","graph"],"avatar":null},
-  {"id":"knowledge-2","handle":"@knowledge-owner-2","name":null,"role":"트랙 C-2","track":"C","service":"synapse-knowledge-svc","modules":["chunking","검색","Modulith"],"avatar":null},
-  {"id":"learning-card","handle":"@learning-card-owner","name":null,"role":"트랙 D-1","track":"D","service":"synapse-learning-svc","modules":["card","srs"],"avatar":null},
-  {"id":"learning-ai","handle":"@learning-ai-owner","name":null,"role":"트랙 D-2","track":"D","service":"synapse-learning-svc","modules":["ai"],"avatar":null},
-  {"id":"frontend","handle":"@frontend","name":null,"role":"전체 협업","track":"—","service":"synapse-frontend","modules":["Flutter UI"],"avatar":null}
+  {
+    "id": "engagement",
+    "handle": "@engagement-owner",
+    "name": null,
+    "role": "트랙 B (1명)",
+    "track": "B",
+    "service": "synapse-engagement-svc",
+    "modules": [
+      "community",
+      "gamification"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "knowledge-1",
+    "handle": "@knowledge-owner-1",
+    "name": null,
+    "role": "트랙 C-1 (2명 중 1명)",
+    "track": "C",
+    "service": "synapse-knowledge-svc",
+    "modules": [
+      "note",
+      "graph"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "knowledge-2",
+    "handle": "@knowledge-owner-2",
+    "name": null,
+    "role": "트랙 C-2 (2명 중 1명)",
+    "track": "C",
+    "service": "synapse-knowledge-svc",
+    "modules": [
+      "chunking",
+      "검색",
+      "Spring Modulith 검증"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "learning-ai",
+    "handle": "@learning-ai-owner",
+    "name": null,
+    "role": "트랙 D-2 (2명 중 1명)",
+    "track": "D",
+    "service": "synapse-learning-svc / learning-ai",
+    "modules": [
+      "ai (Python / FastAPI)"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "learning-card",
+    "handle": "@learning-card-owner",
+    "name": null,
+    "role": "트랙 D-1 (2명 중 1명)",
+    "track": "D",
+    "service": "synapse-learning-svc / learning-card",
+    "modules": [
+      "card",
+      "srs (Java)"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "platform",
+    "handle": "@platform-owner",
+    "name": null,
+    "role": "트랙 A (1명)",
+    "track": "A",
+    "service": "synapse-platform-svc",
+    "modules": [
+      "auth",
+      "audit",
+      "billing",
+      "notification"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "team-lead",
+    "handle": "@team-lead",
+    "name": null,
+    "role": "팀장 (1명)",
+    "track": "—",
+    "service": "Spring Cloud Gateway / 인프라 / 아키텍처",
+    "modules": [
+      "EKS",
+      "RDS",
+      "MSK",
+      "Redis",
+      "OpenSearch",
+      "ArgoCD",
+      "Schema Registry",
+      "CI/CD",
+      "Docker Compose"
+    ],
+    "avatar": null
+  },
+  {
+    "id": "frontend",
+    "handle": "@frontend",
+    "name": null,
+    "role": "전체 협업",
+    "track": "—",
+    "service": "synapse-frontend",
+    "modules": [
+      "Flutter UI"
+    ],
+    "avatar": null
+  }
 ]
