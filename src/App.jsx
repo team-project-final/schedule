@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout'
 import GanttPage from './pages/GanttPage'
 import KanbanPage from './pages/KanbanPage'
 import WeeklyPage from './pages/WeeklyPage'
+import SettingsPage from './pages/SettingsPage'
 import OAuthCallback from './components/Auth/OAuthCallback'
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="kanban" element={<KanbanPage />} />
           <Route path="weekly/:weekId" element={<WeeklyPage />} />
           <Route path="weekly" element={<Navigate to="/weekly/W1" replace />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
         <Route path="login/callback" element={<OAuthCallback />} />
       </Routes>

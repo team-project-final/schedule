@@ -5,6 +5,7 @@ const navItems = [
   { to: '/', label: 'Gantt' },
   { to: '/kanban', label: 'Kanban' },
   { to: '/weekly/W1', label: 'Weekly' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 export default function Header() {
