@@ -23,7 +23,7 @@ function isCarryOver(task) {
   return task.plannedEnd > range[1]
 }
 
-export default function GanttBar({ task, onClick }) {
+export default function GanttBar({ task, onClick, index = 0 }) {
   const startIdx = getBusinessDayOffset(task.plannedStart)
   const spanDays = getBusinessDaysBetween(task.plannedStart, task.plannedEnd)
   const left = startIdx * DAY_WIDTH + 2
@@ -54,7 +54,7 @@ export default function GanttBar({ task, onClick }) {
 
   return (
     <div
-      className="absolute font-mono text-[11px] font-medium flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+      className="absolute font-mono text-[11px] font-medium flex items-center cursor-pointer anim-bar hover:brightness-110"
       style={{
         left,
         width,
@@ -70,6 +70,8 @@ export default function GanttBar({ task, onClick }) {
         textOverflow: 'ellipsis',
         letterSpacing: '0.02em',
         lineHeight: 1,
+        animationDelay: `${Math.min(index * 40, 600)}ms`,
+        transition: 'filter 160ms ease',
       }}
       onClick={() => onClick(task)}
       title={`${task.name}\n${task.plannedStart} ~ ${task.plannedEnd} (${spanDays}영업일)${carryOver ? ' · 잔무 이월' : ''}`}

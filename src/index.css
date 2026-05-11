@@ -277,3 +277,76 @@ body::before {
 
 /* — Hide default focus ring on links — */
 a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 2px; }
+
+/* ─────────────────────────────────────────────────────────── */
+/* — Animations (cyanotype "ink stamp" motion) —                */
+/* ─────────────────────────────────────────────────────────── */
+
+@keyframes ink-stamp {
+  0%   { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  60%  { opacity: 1; transform: translateY(2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes ink-fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes paper-slide-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes bar-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes pen-underline {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes blueprint-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.85; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim-stamp     { animation: ink-stamp     420ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .anim-fade      { animation: ink-fade      360ms ease-out both; }
+  .anim-slide-in  { animation: paper-slide-in 380ms ease-out both; }
+  .anim-bar       {
+    animation: bar-draw 500ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    transform-origin: left center;
+  }
+  .anim-pulse     { animation: blueprint-pulse 2.4s ease-in-out infinite; }
+
+  /* Underline draw on hover (e.g. nav, links) */
+  .ink-underline { position: relative; }
+  .ink-underline::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -2px;
+    height: 1px; background: currentColor;
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .ink-underline:hover::after { transform: scaleX(1); }
+
+  /* Hover stamp (cards, buttons) — print pressure offset */
+  .hover-stamp { transition: box-shadow 160ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                              transform  160ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .hover-stamp:hover {
+    box-shadow: 4px 4px 0 0 var(--ink);
+    transform: translate(-2px, -2px);
+  }
+  .hover-stamp.consumer:hover { box-shadow: 4px 4px 0 0 var(--oxblood); }
+}
+
+/* Stagger delay tokens (use inline style for high N) */
+.delay-1 { animation-delay:  60ms; }
+.delay-2 { animation-delay: 120ms; }
+.delay-3 { animation-delay: 180ms; }
+.delay-4 { animation-delay: 240ms; }
+.delay-5 { animation-delay: 300ms; }
+.delay-6 { animation-delay: 360ms; }
+.delay-7 { animation-delay: 420ms; }
+.delay-8 { animation-delay: 480ms; }
+

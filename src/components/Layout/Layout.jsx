@@ -13,7 +13,7 @@ export default function Layout() {
           <span className="sheet-corner-mark" style={{ top: '-8px', right: '-8px' }} aria-hidden />
           <span className="sheet-corner-mark" style={{ bottom: '-8px', left: '-8px' }} aria-hidden />
           <span className="sheet-corner-mark" style={{ bottom: '-8px', right: '-8px' }} aria-hidden />
-          <div className="sheet p-6 lg:p-10">
+          <div className="sheet p-6 lg:p-10 anim-fade">
             <Outlet />
           </div>
         </div>

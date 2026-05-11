@@ -43,8 +43,8 @@ export default function GanttRow({ member, tasks, onTaskClick }) {
           backgroundSize: `${DAY_WIDTH}px ${DAY_WIDTH}px, ${DAY_WIDTH}px ${DAY_WIDTH}px`,
         }}
       >
-        {tasks.map(t => (
-          <GanttBar key={t.id} task={t} onClick={onTaskClick} />
+        {tasks.map((t, i) => (
+          <GanttBar key={t.id} task={t} onClick={onTaskClick} index={i} />
         ))}
       </div>
     </div>

@@ -19,7 +19,7 @@ export default function SettingsPage() {
       >
         <div>
           <h1
-            className="font-display font-black uppercase leading-[0.85] tracking-tight"
+            className="font-display font-black uppercase leading-[0.85] tracking-tight anim-stamp"
             style={{ fontSize: 'clamp(40px, 7vw, 90px)', color: 'var(--ink)' }}
           >
             Sheet 99<br />

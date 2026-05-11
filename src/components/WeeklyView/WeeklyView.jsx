@@ -26,8 +26,9 @@ export default function WeeklyView({ weekId }) {
               style={{ borderBottom: '1px solid var(--ink)' }}>
         <div>
           <h1
-            className="font-display font-black uppercase leading-[0.85] tracking-tight"
+            className="font-display font-black uppercase leading-[0.85] tracking-tight anim-stamp"
             style={{ fontSize: 'clamp(48px, 8vw, 110px)', color: 'var(--ink)' }}
+            key={weekId}
           >
             Sheet 0{sheetIndex}<br />
             Weekly · {weekId}
@@ -52,7 +53,7 @@ export default function WeeklyView({ weekId }) {
             )}
           </p>
         </div>
-        <table className="titleblock-meta self-start w-full">
+        <table className="titleblock-meta self-start w-full anim-slide-in delay-2">
           <tbody>
             <tr><td className="k">Drawing No.</td><td className="v">SYN-{weekId}</td></tr>
             <tr><td className="k">Period</td><td className="v">{week?.startDate?.slice(5)} → {week?.endDate?.slice(5)}</td></tr>

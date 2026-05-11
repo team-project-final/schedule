@@ -9,7 +9,7 @@ export default function KanbanPage() {
       >
         <div>
           <h1
-            className="font-display font-black uppercase leading-[0.85] tracking-tight"
+            className="font-display font-black uppercase leading-[0.85] tracking-tight anim-stamp"
             style={{ fontSize: 'clamp(48px, 8vw, 110px)', color: 'var(--ink)' }}
           >
             Sheet 03<br />
@@ -29,7 +29,7 @@ export default function KanbanPage() {
             GitHub 로그인 후 드래그로 상태 변경 가능. 필터로 담당자·주차 좁히기.
           </p>
         </div>
-        <table className="titleblock-meta self-start w-full">
+        <table className="titleblock-meta self-start w-full anim-slide-in delay-2">
           <tbody>
             <tr><td className="k">Drawing No.</td><td className="v">SYN-PARTS</td></tr>
             <tr><td className="k">Title</td><td className="v">Parts Catalog · Kanban</td></tr>

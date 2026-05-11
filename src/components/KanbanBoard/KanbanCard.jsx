@@ -23,7 +23,7 @@ export default function KanbanCard({ task, index, onClick }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="mb-2 cursor-pointer transition-shadow"
+          className={`cursor-pointer anim-fade hover-stamp ${variant === 'consumer' ? 'consumer' : ''}`}
           onClick={() => onClick(task)}
           style={{
             background: 'var(--paper)',
@@ -33,6 +33,7 @@ export default function KanbanCard({ task, index, onClick }) {
               ? '4px 4px 0 0 var(--ink)'
               : `inset 4px 0 0 0 ${stripe}`,
             padding: '10px 12px',
+            animationDelay: `${Math.min(index * 24, 400)}ms`,
           }}
         >
           {/* Top row : assembly number + revision stamp */}
