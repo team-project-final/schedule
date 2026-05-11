@@ -54,12 +54,12 @@ export default function GanttBar({ task, onClick }) {
 
   return (
     <div
-      className="absolute font-mono text-[10px] flex items-center cursor-pointer hover:opacity-80 transition-opacity"
+      className="absolute font-mono text-[11px] font-medium flex items-center cursor-pointer hover:opacity-80 transition-opacity"
       style={{
         left,
         width,
-        top: 17,
-        height: 22,
+        top: 16,
+        height: 24,
         background: bg,
         color: fg,
         border: `1px solid ${border}`,
@@ -68,7 +68,8 @@ export default function GanttBar({ task, onClick }) {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
-        letterSpacing: '0.04em',
+        letterSpacing: '0.02em',
+        lineHeight: 1,
       }}
       onClick={() => onClick(task)}
       title={`${task.name}\n${task.plannedStart} ~ ${task.plannedEnd} (${spanDays}영업일)${carryOver ? ' · 잔무 이월' : ''}`}

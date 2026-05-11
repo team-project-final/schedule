@@ -62,11 +62,27 @@ export default function KanbanColumn({ status, tasks, onCardClick, isLast }) {
             }}
           >
             {tasks.length === 0 && (
-              <div
-                className="text-center py-12 font-mono text-[10px] tracking-mono"
-                style={{ color: 'var(--ink-faint)' }}
-              >
-                — NO PARTS —
+              <div className="text-center py-16 px-4">
+                <div
+                  className="inline-block px-5 py-3 mb-3"
+                  style={{
+                    border: '1px dashed var(--ink-faint)',
+                    background: 'var(--paper)',
+                  }}
+                >
+                  <div
+                    className="font-script italic"
+                    style={{ fontSize: '20px', color: 'var(--oxblood)' }}
+                  >
+                    — empty bin —
+                  </div>
+                </div>
+                <div
+                  className="font-mono text-[10px] tracking-mono"
+                  style={{ color: 'var(--ink-soft)' }}
+                >
+                  NO PARTS IN <strong style={{ color: 'var(--ink)' }}>{config.label}</strong>
+                </div>
               </div>
             )}
             {tasks.map((t, i) => (

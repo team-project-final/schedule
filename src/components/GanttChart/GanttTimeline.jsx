@@ -14,6 +14,12 @@ const WEEK_LABEL = {
 const PRESENTATION = '2026-06-15'
 const DAY_NAMES = ['일','월','화','수','목','금','토']
 
+// 다음 영업일 직전에 휴일이 있는 날짜들 (해당 day cell 좌측에 휴일 표시)
+const HOLIDAY_BEFORE = {
+  '2026-05-26': '5/25 부처님오신날',
+  '2026-06-04': '6/3 지방선거',
+}
+
 export default function GanttTimeline() {
   return (
     <div
@@ -30,6 +36,7 @@ export default function GanttTimeline() {
         const weekLabel = WEEK_LABEL[iso]
         const isPresentation = iso === PRESENTATION
         const isToday = iso === new Date().toISOString().split('T')[0]
+        const holidayBefore = HOLIDAY_BEFORE[iso]
 
         return (
           <div
@@ -41,7 +48,11 @@ export default function GanttTimeline() {
               borderLeft: isWeekStart ? '1px solid var(--paper)' : 'none',
               background: isPresentation ? 'var(--oxblood)' : isToday ? 'rgba(244,238,220,0.12)' : 'transparent',
               paddingTop: '8px',
+              boxShadow: holidayBefore
+                ? 'inset 4px 0 0 0 var(--oxblood)'
+                : 'none',
             }}
+            title={holidayBefore ? `직전 휴일: ${holidayBefore}` : undefined}
           >
             {/* Week label stamp */}
             {weekLabel && (

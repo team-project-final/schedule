@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>SYN — Schedule Drawings</title>
+    <script type="text/javascript">
+      // GitHub Pages SPA fallback (rafgraph/spa-github-pages)
+      // Bounces /schedule/some/path → /schedule/?/some/path so the root index.html
+      // (HTTP 200) can restore the URL via history.replaceState and let React Router
+      // pick it up. Avoids "404 Failed to load resource" console noise on deep links.
+      var pathSegmentsToKeep = 1; // keep "/schedule" prefix
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
+    </script>
+  </head>
+  <body></body>
+</html>

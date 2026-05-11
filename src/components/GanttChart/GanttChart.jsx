@@ -57,12 +57,17 @@ export default function GanttChart() {
         <LegendItem label="OUTLINE · 안정화 / E2E (W5)">
           <span className="inline-block w-6 h-3" style={{ background: 'var(--paper)', border: '1px solid var(--ink)' }} />
         </LegendItem>
-        <LegendItem label="HATCHING · holiday (5/25 · 6/3)">
+        <LegendItem label="HOLIDAY MARKER · 5/25 부처님오신날 (W3) · 6/3 지방선거 (W4)">
           <span
-            className="inline-block w-6 h-3"
+            className="inline-block"
             style={{
-              backgroundImage: 'repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 4px)',
-              border: '1px solid var(--ink)',
+              width: 24,
+              height: 12,
+              borderLeft: '4px solid var(--oxblood)',
+              background: 'var(--paper)',
+              borderTop: '1px solid var(--ink-faint)',
+              borderRight: '1px solid var(--ink-faint)',
+              borderBottom: '1px solid var(--ink-faint)',
             }}
           />
         </LegendItem>
