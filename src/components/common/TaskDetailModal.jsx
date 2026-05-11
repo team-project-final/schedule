@@ -11,35 +11,108 @@ export default function TaskDetailModal({ task, onClose }) {
 
   const handleAdd = () => {
     if (!comment.trim() || !user) return
-    addComment(task.id, { author: user.login, text: comment.trim(), timestamp: new Date().toISOString() })
+    addComment(task.id, {
+      author: user.login,
+      text: comment.trim(),
+      timestamp: new Date().toISOString(),
+    })
     setComment('')
   }
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{ background: 'rgba(14,47,80,0.55)' }}
+      onClick={onClose}
+    >
+      <div
+        className="max-w-xl w-full max-h-[85vh] overflow-y-auto"
+        style={{
+          background: 'var(--paper)',
+          backgroundImage:
+            'linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),' +
+            'linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px)',
+          backgroundSize: '16px 16px, 16px 16px',
+          border: '1px solid var(--ink)',
+          boxShadow: '0 24px 48px rgba(14,47,80,0.30), 0 0 0 8px var(--paper) inset, 0 0 0 9px var(--ink-faint) inset',
+        }}
+        onClick={e => e.stopPropagation()}
+      >
         <div className="p-6">
-          <div className="flex justify-between items-start mb-4">
+          {/* Drawing meta header */}
+          <div
+            className="flex items-baseline justify-between mb-4 pb-3"
+            style={{ borderBottom: '1px solid var(--ink)' }}
+          >
             <div>
-              <p className="text-xs text-slate-500 font-mono mb-1">{task.week} · Step {task.stepNumber} · {member?.handle}</p>
-              <h3 className="text-lg font-bold text-slate-900">{task.name}</h3>
+              <p
+                className="font-mono text-[10px] tracking-mono mb-1"
+                style={{ color: 'var(--ink-soft)' }}
+              >
+                <span style={{ color: 'var(--oxblood)' }}>PART</span>
+                {' · '}{task.id.toUpperCase()} · {task.week} · STEP {task.stepNumber} · {member?.handle}
+              </p>
+              <h3
+                className="font-display font-bold uppercase tracking-wide leading-tight"
+                style={{ fontSize: '24px', color: 'var(--ink)' }}
+              >
+                {task.name}
+              </h3>
             </div>
-            <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-2xl leading-none">×</button>
+            <button
+              onClick={onClose}
+              className="font-mono"
+              style={{
+                background: 'var(--ink)',
+                color: 'var(--paper)',
+                width: '28px',
+                height: '28px',
+                border: '1px solid var(--ink)',
+                fontSize: '14px',
+                lineHeight: 1,
+              }}
+              aria-label="close"
+            >
+              ✕
+            </button>
           </div>
-          <StatusBadge status={task.status} />
-          <div className="mt-4 space-y-2 text-sm">
-            <p><span className="font-medium text-slate-600">Goal:</span> {task.goal}</p>
-            <p><span className="font-medium text-slate-600">Duration:</span> <span className="font-mono">{task.durationDays}일</span></p>
-            <p><span className="font-medium text-slate-600">기간:</span> <span className="font-mono">{task.plannedStart} ~ {task.plannedEnd}</span></p>
-            <p><span className="font-medium text-slate-600">Priority:</span> <span className={task.priority === 'P0' ? 'text-red-600 font-semibold' : ''}>{task.priority}</span></p>
+
+          <div className="mb-4"><StatusBadge status={task.status} /></div>
+
+          {/* Spec table */}
+          <table className="titleblock-meta w-full mb-5">
+            <tbody>
+              <tr><td className="k">Goal</td><td className="v" style={{ textTransform: 'none', letterSpacing: 0, fontFamily: 'var(--font-mono)' }}>{task.goal || '—'}</td></tr>
+              <tr><td className="k">Duration</td><td className="v">{task.durationDays}d</td></tr>
+              <tr><td className="k">Period</td><td className="v">{task.plannedStart} → {task.plannedEnd}</td></tr>
+              <tr>
+                <td className="k">Priority</td>
+                <td className="v" style={{ color: task.priority === 'P0' ? 'var(--oxblood)' : 'var(--ink)' }}>
+                  {task.priority || 'P0'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Comments */}
+          <div
+            className="font-mono text-[10px] tracking-mono mb-2"
+            style={{ color: 'var(--ink-soft)' }}
+          >
+            <span style={{ color: 'var(--oxblood)' }}>§NOTES</span> · COMMENTS ({task.comments?.length || 0})
           </div>
-          <hr className="my-4 border-slate-200" />
-          <h4 className="font-semibold text-slate-800 mb-2">코멘트</h4>
           <CommentList comments={task.comments} />
+
           {user && (
             <div className="mt-3 flex gap-2">
-              <input className="flex-1 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="코멘트 추가..." value={comment} onChange={e => setComment(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAdd()} />
-              <button onClick={handleAdd} className="px-3 py-1.5 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700">추가</button>
+              <input
+                className="input-ink flex-1"
+                placeholder="코멘트 추가..."
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleAdd()}
+              />
+              <button onClick={handleAdd} className="btn-ink">ADD</button>
             </div>
           )}
         </div>

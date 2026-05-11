@@ -30,11 +30,26 @@ export default function KanbanBoard() {
     <>
       <KanbanFilters filters={filters} onChange={setFilters} />
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className="flex gap-4 overflow-x-auto">
-          {COLUMNS.map(s => <KanbanColumn key={s} status={s} tasks={filtered.filter(t => t.status === s)} onCardClick={setSelected} />)}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0" style={{ border: '1px solid var(--ink)' }}>
+          {COLUMNS.map((s, i) => (
+            <KanbanColumn
+              key={s}
+              status={s}
+              tasks={filtered.filter(t => t.status === s)}
+              onCardClick={setSelected}
+              isLast={i === COLUMNS.length - 1}
+            />
+          ))}
         </div>
       </DragDropContext>
-      {!user && <p className="text-xs text-slate-400 mt-3">* 드래그로 상태 변경은 GitHub 로그인 후 가능합니다</p>}
+      {!user && (
+        <p
+          className="font-mono text-[10px] tracking-mono mt-3"
+          style={{ color: 'var(--ink-soft)' }}
+        >
+          * 드래그로 상태 변경은 GitHub 로그인 후 가능합니다
+        </p>
+      )}
       {selected && <TaskDetailModal task={selected} onClose={() => setSelected(null)} />}
     </>
   )

@@ -2,20 +2,76 @@ import { Droppable } from '@hello-pangea/dnd'
 import KanbanCard from './KanbanCard'
 import { STATUS_CONFIG } from '../../utils/statusUtils'
 
-export default function KanbanColumn({ status, tasks, onCardClick }) {
+const STATUS_INK = {
+  not_started: 'var(--grey)',
+  in_progress: 'var(--ink)',
+  done:        'var(--oxblood)',
+}
+
+const STATUS_NUM = {
+  not_started: '§01',
+  in_progress: '§02',
+  done:        '§03',
+}
+
+export default function KanbanColumn({ status, tasks, onCardClick, isLast }) {
   const config = STATUS_CONFIG[status]
+  const stripe = STATUS_INK[status] || 'var(--ink)'
+
   return (
-    <div className="flex-1 min-w-[280px]">
-      <div className="flex items-center gap-2 mb-3">
-        <span className={`w-2.5 h-2.5 rounded-full ${config.color}`} />
-        <h3 className="font-semibold text-slate-700 text-sm">{config.label}</h3>
-        <span className="text-xs text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded-full">{tasks.length}</span>
+    <div className="flex flex-col" style={{ borderRight: isLast ? 'none' : '1px solid var(--ink-faint)' }}>
+      {/* Column header — drawing tag */}
+      <div
+        className="flex items-baseline gap-2 px-4 py-3"
+        style={{
+          background: 'var(--ink)',
+          color: 'var(--paper)',
+          borderBottom: '1px solid var(--ink)',
+          boxShadow: `inset 0 -3px 0 0 ${stripe}`,
+        }}
+      >
+        <span
+          className="font-mono text-[10px] tracking-mono"
+          style={{ color: 'rgba(244,238,220,0.6)' }}
+        >
+          {STATUS_NUM[status]}
+        </span>
+        <span className="font-display font-bold uppercase tracking-wider text-[15px]">
+          {config.label}
+        </span>
+        <span
+          className="ml-auto font-mono text-[10px] tracking-mono"
+          style={{ color: 'rgba(244,238,220,0.7)' }}
+        >
+          {tasks.length} PARTS
+        </span>
       </div>
+
       <Droppable droppableId={status}>
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps}
-            className={`min-h-[200px] rounded-lg p-2 transition-colors ${snapshot.isDraggingOver ? 'bg-blue-50' : 'bg-slate-50'}`}>
-            {tasks.map((t, i) => <KanbanCard key={t.id} task={t} index={i} onClick={onCardClick} />)}
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className="min-h-[300px] p-2 transition-colors"
+            style={{
+              background: snapshot.isDraggingOver ? 'var(--paper-2)' : 'var(--paper)',
+              backgroundImage:
+                'linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),' +
+                'linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px)',
+              backgroundSize: '16px 16px, 16px 16px',
+            }}
+          >
+            {tasks.length === 0 && (
+              <div
+                className="text-center py-12 font-mono text-[10px] tracking-mono"
+                style={{ color: 'var(--ink-faint)' }}
+              >
+                — NO PARTS —
+              </div>
+            )}
+            {tasks.map((t, i) => (
+              <KanbanCard key={t.id} task={t} index={i} onClick={onCardClick} />
+            ))}
             {provided.placeholder}
           </div>
         )}
