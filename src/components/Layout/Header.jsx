@@ -2,27 +2,72 @@ import { NavLink } from 'react-router-dom'
 import LoginButton from '../Auth/LoginButton'
 
 const navItems = [
-  { to: '/', label: 'Gantt' },
-  { to: '/kanban', label: 'Kanban' },
-  { to: '/weekly/W1', label: 'Weekly' },
-  { to: '/settings', label: 'Settings' },
+  { to: '/',          num: '§02', label: 'PLAN',    sub: 'gantt' },
+  { to: '/kanban',    num: '§03', label: 'PARTS',   sub: 'kanban' },
+  { to: '/weekly/W1', num: '§01', label: 'WEEKLY',  sub: 'sheet' },
+  { to: '/settings',  num: '§99', label: 'CONFIG',  sub: 'settings' },
 ]
 
 export default function Header() {
   return (
-    <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
-      <div className="flex items-center gap-6">
-        <h1 className="text-lg font-bold text-slate-900">Synapse Schedule</h1>
+    <header
+      className="sticky top-0 z-50 flex items-center justify-between gap-6 border-b border-paper px-6 lg:px-10 py-3"
+      style={{ background: 'var(--ink)', color: 'var(--paper)' }}
+    >
+      <div className="flex items-center gap-8">
+        <div className="flex items-baseline gap-3">
+          <span className="font-display text-2xl leading-none tracking-wider">SYN</span>
+          <span className="font-mono text-[10px] tracking-mono" style={{ color: 'rgba(244,238,220,0.55)' }}>
+            DRAWINGS · CYANOTYPE
+          </span>
+        </div>
+
         <nav className="flex gap-1">
-          {navItems.map(({ to, label }) => (
-            <NavLink key={to} to={to} end={to === '/'}
-              className={({ isActive }) => `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${isActive ? 'bg-blue-50 text-blue-700' : 'text-slate-600 hover:bg-slate-100'}`}>
-              {label}
+          {navItems.map(({ to, num, label, sub }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              className={({ isActive }) =>
+                `group flex items-baseline gap-2 px-3 py-1.5 font-mono text-[11px] tracking-mono-tight transition-colors border ${
+                  isActive
+                    ? 'border-paper bg-paper text-ink'
+                    : 'border-transparent hover:border-paper'
+                }`
+              }
+              style={({ isActive }) =>
+                isActive
+                  ? { background: 'var(--paper)', color: 'var(--ink)' }
+                  : { color: 'var(--paper)' }
+              }
+            >
+              <span
+                className="font-mono text-[9px]"
+                style={{ color: 'inherit', opacity: 0.6 }}
+              >
+                {num}
+              </span>
+              <span className="font-display font-bold tracking-wider">{label}</span>
+              <span
+                className="font-mono text-[9px] hidden lg:inline"
+                style={{ color: 'inherit', opacity: 0.5 }}
+              >
+                / {sub}
+              </span>
             </NavLink>
           ))}
         </nav>
       </div>
-      <LoginButton />
+
+      <div className="flex items-center gap-4">
+        <span
+          className="hidden md:inline font-mono text-[10px] tracking-mono"
+          style={{ color: 'rgba(244,238,220,0.55)' }}
+        >
+          REV 3.0 · 2026-05-12 → 06-15 · 22 WORKDAYS
+        </span>
+        <LoginButton />
+      </div>
     </header>
   )
 }

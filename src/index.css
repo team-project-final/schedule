@@ -1,17 +1,279 @@
 @import "tailwindcss";
 
 @theme {
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-done: #16a34a;
-  --color-in-progress: #2563eb;
-  --color-not-started: #94a3b8;
-  --color-blocked: #dc2626;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  /* — Cyanotype palette — */
+  --color-ink:        #0E2F50;
+  --color-ink-soft:   #2D4868;
+  --color-ink-faint:  rgba(14, 47, 80, 0.18);
+  --color-ink-grid:   rgba(14, 47, 80, 0.08);
+  --color-paper:      #F4EEDC;
+  --color-paper-2:    #ECE3CB;
+  --color-paper-deep: #DDD0AF;
+  --color-oxblood:    #7A2426;
+  --color-oxblood-soft: rgba(122, 36, 38, 0.12);
+  --color-graphite:   #1A1A1A;
+  --color-grey:       #6B7C8A;
+
+  /* — Status colors (re-mapped to cyanotype palette) — */
+  --color-done:        #0E2F50;
+  --color-in-progress: #2D4868;
+  --color-not-started: #6B7C8A;
+  --color-blocked:     #7A2426;
+  --color-accent:      #0E2F50;
+  --color-accent-hover: #7A2426;
+
+  /* — Typography — */
+  --font-display: 'Big Shoulders Display', sans-serif;
+  --font-script:  'Fraunces', serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  --font-sans:    'IBM Plex Mono', ui-monospace, monospace;
 }
 
-body {
-  font-family: var(--font-sans);
-  background-color: #f8fafc;
+:root {
+  --grid-mm: 16px;
+  --ink:         #0E2F50;
+  --ink-soft:    #2D4868;
+  --ink-faint:   rgba(14, 47, 80, 0.18);
+  --ink-grid:    rgba(14, 47, 80, 0.08);
+  --paper:       #F4EEDC;
+  --paper-2:     #ECE3CB;
+  --paper-deep:  #DDD0AF;
+  --oxblood:     #7A2426;
+  --oxblood-soft: rgba(122, 36, 38, 0.12);
+  --graphite:    #1A1A1A;
+  --grey:        #6B7C8A;
 }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px);
+  background-size: var(--grid-mm) var(--grid-mm), var(--grid-mm) var(--grid-mm);
+}
+
+/* SVG noise overlay for paper texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.06  0 0 0 0 0.18  0 0 0 0 0.31  0 0 0 0.5 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+}
+
+/* — Display utility — */
+.font-display { font-family: var(--font-display); font-weight: 900; letter-spacing: -0.02em; text-transform: uppercase; }
+.font-script  { font-family: var(--font-script);  font-style: italic; font-weight: 400; }
+.font-mono    { font-family: var(--font-mono); }
+.tracking-mono { letter-spacing: 0.18em; text-transform: uppercase; }
+.tracking-mono-tight { letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* — Sheet / Drawing frame — */
+.sheet {
+  position: relative;
+  background: var(--paper);
+  background-image:
+    linear-gradient(var(--ink-grid) 0.5px, transparent 0.5px),
+    linear-gradient(90deg, var(--ink-grid) 0.5px, transparent 0.5px);
+  background-size: var(--grid-mm) var(--grid-mm), var(--grid-mm) var(--grid-mm);
+  border: 1px solid var(--ink);
+  box-shadow:
+    0 0 0 1px var(--ink) inset,
+    0 0 0 8px var(--paper) inset,
+    0 0 0 9px var(--ink-faint) inset,
+    0 24px 48px rgba(14,47,80,0.10);
+}
+.sheet-corner-mark {
+  position: absolute;
+  width: 16px; height: 16px;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+/* — Titleblock (drawing meta box) — */
+.titleblock-meta {
+  border: 1px solid var(--ink);
+  border-collapse: collapse;
+}
+.titleblock-meta td {
+  padding: 8px 12px;
+  border: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.titleblock-meta td.k { background: var(--paper-2); color: var(--ink-soft); width: 110px; }
+.titleblock-meta td.v { font-weight: 600; }
+.titleblock-meta td.stamp {
+  font-family: var(--font-script);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--oxblood);
+  font-size: 14px;
+}
+
+/* — Annotation callout (NOTE box) — */
+.annotation {
+  position: relative;
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 12px 14px 12px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin-top: 16px;
+}
+.annotation::before {
+  content: 'NOTE';
+  position: absolute;
+  top: -1px; left: -1px;
+  background: var(--ink); color: var(--paper);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  padding: 2px 8px;
+}
+.annotation strong, .annotation b { color: var(--oxblood); font-weight: 600; }
+
+/* — Hatching (holiday cells) — */
+.hatched {
+  background-image: repeating-linear-gradient(135deg, var(--ink-faint) 0, var(--ink-faint) 1px, transparent 1px, transparent 8px);
+}
+.hatched-red {
+  background-image: repeating-linear-gradient(135deg, rgba(122,36,38,0.35) 0, rgba(122,36,38,0.35) 1px, transparent 1px, transparent 6px);
+}
+
+/* — Drawing symbols — */
+.dwg-diamond {
+  display: inline-block;
+  width: 14px; height: 14px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  transform: rotate(45deg);
+}
+.dwg-diamond.solid { background: var(--ink); }
+.dwg-diamond.presentation {
+  background: var(--oxblood); border-color: var(--oxblood);
+  width: 22px; height: 22px;
+  position: relative;
+}
+.dwg-diamond.presentation::after {
+  content: '★';
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--paper);
+  font-size: 13px;
+  transform: rotate(-45deg);
+}
+
+/* — Producer / Consumer / Gate task chip — */
+.task-chip {
+  border: 1px solid var(--ink);
+  background: var(--paper);
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--ink);
+  position: relative;
+}
+.task-chip.producer { box-shadow: inset 4px 0 0 0 var(--ink); }
+.task-chip.consumer { box-shadow: inset 4px 0 0 0 var(--oxblood); background: linear-gradient(90deg, rgba(122,36,38,0.04), transparent 60%); }
+.task-chip.gate { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.task-chip .task-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 2px;
+  display: flex; justify-content: space-between; gap: 8px;
+}
+.task-chip.gate .task-meta { color: rgba(244,238,220,0.7); }
+.task-chip .pri { color: var(--oxblood); font-weight: 600; }
+.task-chip.gate .pri { color: var(--paper); }
+
+/* — Mini bar (timeline) — */
+.bar {
+  height: 22px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  padding: 0 8px;
+  display: flex; align-items: center;
+  border: 1px solid var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar.consumer { background: var(--oxblood); border-color: var(--oxblood); }
+.bar.outline { background: var(--paper); color: var(--ink); border-color: var(--ink); }
+.bar.outline.consumer { color: var(--oxblood); border-color: var(--oxblood); }
+.bar.dashed { border-style: dashed; }
+
+/* — Stamp (revision / signature) — */
+.stamp-script {
+  font-family: var(--font-script);
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 14px;
+}
+
+/* — Buttons (cyanotype style) — */
+.btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  padding: 6px 14px;
+  transition: all 150ms;
+  cursor: pointer;
+}
+.btn-ink:hover { background: var(--oxblood); border-color: var(--oxblood); }
+.btn-outline {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  padding: 6px 14px;
+  cursor: pointer;
+}
+.btn-outline:hover { background: var(--ink); color: var(--paper); }
+
+/* — Inputs — */
+.input-ink, select.input-ink {
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  padding: 6px 10px;
+  appearance: none;
+}
+.input-ink:focus { outline: 2px solid var(--oxblood); outline-offset: -2px; }
+
+/* — Hide default focus ring on links — */
+a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 2px; }
