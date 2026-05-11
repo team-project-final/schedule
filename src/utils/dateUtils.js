@@ -1,5 +1,5 @@
 export const PROJECT_START = '2026-05-12'
-export const PROJECT_END = '2026-06-06'
+export const PROJECT_END = '2026-06-15'
 export const DAY_WIDTH = 48
 
 // 공휴일 목록 (토/일 외 추가 휴일)

@@ -10,7 +10,7 @@ export default function KanbanFilters({ filters, onChange }) {
       </select>
       <select className="border border-slate-300 rounded-lg px-3 py-1.5 text-sm bg-white" value={filters.week || ''} onChange={e => onChange({ ...filters, week: e.target.value || null })}>
         <option value="">전체 주차</option>
-        {['W1','W2','W3','W4'].map(w => <option key={w} value={w}>{w}</option>)}
+        {['W1','W2','W3','W4','W5'].map(w => <option key={w} value={w}>{w}</option>)}
       </select>
     </div>
   )
