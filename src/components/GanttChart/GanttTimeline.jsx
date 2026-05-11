@@ -1,21 +1,25 @@
-import { TOTAL_DAYS, DAY_WIDTH, PROJECT_START } from '../../utils/dateUtils'
+import { BUSINESS_DAYS, TOTAL_BUSINESS_DAYS, DAY_WIDTH } from '../../utils/dateUtils'
 
 export default function GanttTimeline() {
-  const days = []
-  const start = new Date(PROJECT_START)
-  for (let i = 0; i < TOTAL_DAYS; i++) {
-    const d = new Date(start); d.setDate(d.getDate() + i)
-    const isWeekend = d.getDay() === 0 || d.getDay() === 6
-    days.push({ label: `${d.getMonth()+1}/${d.getDate()}`, dayName: ['일','월','화','수','목','금','토'][d.getDay()], isWeekend })
-  }
   return (
-    <div className="flex border-b border-slate-200" style={{ width: TOTAL_DAYS * DAY_WIDTH }}>
-      {days.map((day, i) => (
-        <div key={i} className={`flex-shrink-0 text-center border-r border-slate-100 ${day.isWeekend ? 'bg-slate-50' : ''}`} style={{ width: DAY_WIDTH }}>
-          <div className="text-[10px] text-slate-400 font-mono">{day.dayName}</div>
-          <div className="text-[11px] text-slate-600 font-mono">{day.label}</div>
-        </div>
-      ))}
+    <div className="flex border-b border-slate-200" style={{ width: TOTAL_BUSINESS_DAYS * DAY_WIDTH }}>
+      {BUSINESS_DAYS.map((d, i) => {
+        const dayNames = ['일','월','화','수','목','금','토']
+        const isToday = d.toISOString().split('T')[0] === new Date().toISOString().split('T')[0]
+        const isMonday = d.getDay() === 1
+        return (
+          <div
+            key={i}
+            className={`flex-shrink-0 text-center border-r ${isMonday ? 'border-slate-300' : 'border-slate-100'} ${isToday ? 'bg-blue-50' : ''}`}
+            style={{ width: DAY_WIDTH }}
+          >
+            <div className="text-[10px] text-slate-400 font-mono">{dayNames[d.getDay()]}</div>
+            <div className={`text-[11px] font-mono ${isToday ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}>
+              {d.getMonth()+1}/{d.getDate()}
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
