@@ -1,32 +1,94 @@
 import { useState } from 'react'
 import StatusBadge from '../common/StatusBadge'
-import ProgressBar from '../common/ProgressBar'
 import MemberAvatar from '../common/MemberAvatar'
 import { getProgressPercent } from '../../utils/statusUtils'
 
 export default function MemberAccordion({ member, tasks, onTaskClick }) {
   const [open, setOpen] = useState(false)
   const progress = getProgressPercent(tasks)
+
   return (
-    <div className="bg-white rounded-lg border border-slate-200 mb-2">
-      <button className="w-full flex items-center justify-between px-4 py-3 hover:bg-slate-50" onClick={() => setOpen(!open)}>
-        <MemberAvatar member={member} size={28} />
+    <div style={{ border: '1px solid var(--ink)', background: 'var(--paper)' }}>
+      <button
+        className="w-full flex items-center justify-between px-4 py-3 transition-colors"
+        onClick={() => setOpen(!open)}
+        style={{
+          borderBottom: open ? '1px solid var(--ink-faint)' : 'none',
+          background: open ? 'var(--paper-2)' : 'var(--paper)',
+        }}
+      >
         <div className="flex items-center gap-3">
-          <div className="w-24"><ProgressBar percent={progress} size="sm" /></div>
-          <span className="text-xs font-mono text-slate-500 w-10 text-right">{progress}%</span>
-          <span className={`text-slate-400 transition-transform text-xs ${open ? 'rotate-180' : ''}`}>▼</span>
+          <MemberAvatar member={member} size={32} />
+          <div className="text-left">
+            <div className="font-mono text-[12px] font-semibold tracking-wider uppercase"
+                 style={{ color: 'var(--ink)' }}>
+              {member.handle}
+            </div>
+            <div className="font-mono text-[9px] tracking-mono"
+                 style={{ color: 'var(--ink-soft)' }}>
+              {member.role || ''} · {tasks.length} TASKS
+            </div>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-2">
+            <div className="w-32 h-[3px]" style={{ background: 'var(--ink-faint)' }}>
+              <div className="h-[3px]" style={{ width: `${progress}%`, background: 'var(--ink)' }} />
+            </div>
+            <span className="font-mono text-[11px] font-semibold w-10 text-right"
+                  style={{ color: 'var(--ink)' }}>
+              {progress}%
+            </span>
+          </div>
+          <span
+            className="font-mono text-[14px] inline-block transition-transform"
+            style={{ color: 'var(--ink)', transform: open ? 'rotate(180deg)' : 'none' }}
+          >
+            ▼
+          </span>
         </div>
       </button>
+
       {open && (
-        <div className="border-t border-slate-100 px-4 py-2 space-y-1">
+        <div>
           {tasks.map(t => (
-            <div key={t.id} className="flex items-center justify-between py-2 px-2 hover:bg-slate-50 rounded cursor-pointer" onClick={() => onTaskClick(t)}>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono text-slate-400 w-6">S{t.stepNumber}</span>
-                <span className="text-sm text-slate-700">{t.name}</span>
+            <button
+              key={t.id}
+              className="w-full flex items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-[var(--paper-2)]"
+              style={{ borderBottom: '1px solid var(--ink-faint)' }}
+              onClick={() => onTaskClick(t)}
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <span
+                  className="font-mono text-[9px] tracking-mono shrink-0"
+                  style={{
+                    color: 'var(--paper)',
+                    background: 'var(--ink)',
+                    padding: '2px 6px',
+                  }}
+                >
+                  S{String(t.stepNumber).padStart(2, '0')}
+                </span>
+                <span
+                  className="font-mono text-[9px] tracking-mono shrink-0"
+                  style={{ color: t.priority === 'P0' ? 'var(--oxblood)' : 'var(--ink-soft)' }}
+                >
+                  {t.priority || 'P0'}
+                </span>
+                <span className="font-mono text-[12px] truncate" style={{ color: 'var(--ink)' }}>
+                  {t.name}
+                </span>
               </div>
-              <StatusBadge status={t.status} />
-            </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <span
+                  className="hidden md:inline font-mono text-[10px]"
+                  style={{ color: 'var(--ink-soft)' }}
+                >
+                  {t.plannedStart?.slice(5)} → {t.plannedEnd?.slice(5)}
+                </span>
+                <StatusBadge status={t.status} />
+              </div>
+            </button>
           ))}
         </div>
       )}
