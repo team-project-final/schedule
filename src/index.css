@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-done: #16a34a;
+  --color-in-progress: #2563eb;
+  --color-not-started: #94a3b8;
+  --color-blocked: #dc2626;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f8fafc;
+}

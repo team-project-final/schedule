@@ -1,0 +1,10 @@
+[
+  {"id":"team-lead","handle":"@team-lead","role":"팀장","track":"—","service":"Gateway / 인프라","modules":["Schema Registry","ArgoCD","CI/CD"],"avatar":null},
+  {"id":"platform","handle":"@platform-owner","role":"트랙 A","track":"A","service":"synapse-platform-svc","modules":["auth","audit","billing","notification"],"avatar":null},
+  {"id":"engagement","handle":"@engagement-owner","role":"트랙 B","track":"B","service":"synapse-engagement-svc","modules":["community","gamification"],"avatar":null},
+  {"id":"knowledge-1","handle":"@knowledge-owner-1","role":"트랙 C-1","track":"C","service":"synapse-knowledge-svc","modules":["note","graph"],"avatar":null},
+  {"id":"knowledge-2","handle":"@knowledge-owner-2","role":"트랙 C-2","track":"C","service":"synapse-knowledge-svc","modules":["chunking","검색","Modulith"],"avatar":null},
+  {"id":"learning-card","handle":"@learning-card-owner","role":"트랙 D-1","track":"D","service":"synapse-learning-svc","modules":["card","srs"],"avatar":null},
+  {"id":"learning-ai","handle":"@learning-ai-owner","role":"트랙 D-2","track":"D","service":"synapse-learning-svc","modules":["ai"],"avatar":null},
+  {"id":"frontend","handle":"@frontend","role":"전체 협업","track":"—","service":"synapse-frontend","modules":["Flutter UI"],"avatar":null}
+]
