@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import StatusBadge from './StatusBadge'
 import CommentList from './CommentList'
 import useStore from '../../stores/store'
@@ -8,6 +9,18 @@ export default function TaskDetailModal({ task, onClose }) {
   const user = useStore(s => s.user)
   const addComment = useStore(s => s.addComment)
   const member = useStore(s => s.getMember(task.memberId))
+
+  // Lock body scroll while modal open + ESC key to close
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.body.style.overflow = prevOverflow
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [onClose])
 
   const handleAdd = () => {
     if (!comment.trim() || !user) return
@@ -19,7 +32,10 @@ export default function TaskDetailModal({ task, onClose }) {
     setComment('')
   }
 
-  return (
+  // Render via portal so modal escapes any transformed ancestor (which would
+  // otherwise turn `position: fixed` into "containing block fixed" — i.e. the
+  // modal would anchor to a transformed parent rather than the viewport).
+  return createPortal(
     <div
       className="fixed inset-0 flex items-center justify-center z-50 p-4"
       style={{ background: 'rgba(14,47,80,0.55)' }}
@@ -117,6 +133,7 @@ export default function TaskDetailModal({ task, onClose }) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
