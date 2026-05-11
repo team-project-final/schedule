@@ -23,7 +23,7 @@ export default function KanbanCard({ task, index, onClick }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="cursor-pointer anim-fade kanban-card"
+          className="cursor-pointer kanban-card"
           onClick={() => onClick(task)}
           style={{
             background: 'var(--paper)',
@@ -33,8 +33,7 @@ export default function KanbanCard({ task, index, onClick }) {
               ? '4px 4px 0 0 var(--ink)'
               : `inset 4px 0 0 0 ${stripe}`,
             padding: '10px 12px',
-            animationDelay: `${Math.min(index * 24, 400)}ms`,
-            transition: 'box-shadow 160ms ease',
+            transition: 'box-shadow 120ms ease',
           }}
           data-variant={variant}
         >
