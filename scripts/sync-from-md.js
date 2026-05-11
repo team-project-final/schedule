@@ -6,6 +6,9 @@
  * documents 레포의 프로젝트 관리 문서(60개 MD)를 파싱하여
  * schedule 앱용 JSON 데이터(members.json, tasks.json, schedule.json)를 생성한다.
  *
+ * 5주 일정 (2026-05-12 ~ 06-15) 반영, 2026-05-11.
+ * 휴일: 5/25(부처님오신날), 6/3(제9회 전국동시지방선거).
+ *
  * 사용법:
  *   node scripts/sync-from-md.js --input <project-management-dir> --output <data-dir>
  *
@@ -178,15 +181,17 @@ function parseTasks() {
         week = 'W1'
       } else if (stepNumber <= 6) {
         week = 'W2'
-      } else if (stepNumber <= 9) {
+      } else if (stepNumber <= 8) {
         week = 'W3'
-      } else {
+      } else if (stepNumber <= 11) {
         week = 'W4'
+      } else {
+        week = 'W5'
       }
 
       // Planned dates 계산 (주차 기반)
-      const weekStarts = { W1: '2026-05-12', W2: '2026-05-19', W3: '2026-05-26', W4: '2026-06-02' }
-      const weekEnds = { W1: '2026-05-16', W2: '2026-05-23', W3: '2026-05-30', W4: '2026-06-06' }
+      const weekStarts = { W1: '2026-05-12', W2: '2026-05-18', W3: '2026-05-26', W4: '2026-06-01', W5: '2026-06-08' }
+      const weekEnds = { W1: '2026-05-15', W2: '2026-05-22', W3: '2026-05-29', W4: '2026-06-05', W5: '2026-06-12' }
       const plannedStart = weekStarts[week] || '2026-05-12'
       const plannedEnd = weekEnds[week] || '2026-05-16'
 
@@ -222,7 +227,7 @@ function parseTasks() {
 
     for (const week of weeks) {
       const weekTasks = memberTasks.filter(t => t.week === week).sort((a, b) => a.stepNumber - b.stepNumber)
-      const weekStarts = { W1: '2026-05-12', W2: '2026-05-19', W3: '2026-05-26', W4: '2026-06-02' }
+      const weekStarts = { W1: '2026-05-12', W2: '2026-05-18', W3: '2026-05-26', W4: '2026-06-01', W5: '2026-06-08' }
       let cursor = new Date(weekStarts[week])
 
       // 주말/공휴일 건너뛰기
