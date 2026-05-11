@@ -52,7 +52,7 @@ export default function KanbanColumn({ status, tasks, onCardClick, isLast }) {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="min-h-[300px] p-2 transition-colors grid grid-cols-1 xl:grid-cols-2 gap-2 auto-rows-min"
+            className="min-h-[300px] p-2 transition-colors space-y-2"
             style={{
               background: snapshot.isDraggingOver ? 'var(--paper-2)' : 'var(--paper)',
               backgroundImage:
@@ -62,7 +62,7 @@ export default function KanbanColumn({ status, tasks, onCardClick, isLast }) {
             }}
           >
             {tasks.length === 0 && (
-              <div className="col-span-full text-center py-16 px-4 anim-fade">
+              <div className="text-center py-16 px-4 anim-fade">
                 <div
                   className="inline-block px-5 py-3 mb-3"
                   style={{

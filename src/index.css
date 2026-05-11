@@ -330,7 +330,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outli
   }
   .ink-underline:hover::after { transform: scaleX(1); }
 
-  /* Hover stamp (cards, buttons) — print pressure offset */
+  /* Hover stamp (buttons) — print pressure offset (NOT for draggable cards) */
   .hover-stamp { transition: box-shadow 160ms cubic-bezier(0.34, 1.56, 0.64, 1),
                               transform  160ms cubic-bezier(0.34, 1.56, 0.64, 1); }
   .hover-stamp:hover {
@@ -338,6 +338,14 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--oxblood); outli
     transform: translate(-2px, -2px);
   }
   .hover-stamp.consumer:hover { box-shadow: 4px 4px 0 0 var(--oxblood); }
+
+  /* Kanban card hover — box-shadow only (no transform, dnd-compatible) */
+  .kanban-card:hover {
+    box-shadow: inset 4px 0 0 0 var(--ink), 4px 4px 0 0 var(--ink);
+  }
+  .kanban-card[data-variant="consumer"]:hover {
+    box-shadow: inset 4px 0 0 0 var(--oxblood), 4px 4px 0 0 var(--oxblood);
+  }
 }
 
 /* Stagger delay tokens (use inline style for high N) */
